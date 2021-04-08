@@ -1,10 +1,11 @@
 local fn = vim.fn
 local utils = require'nvim-treesitter.utils'
+local configs = require'nvim-treesitter.configs'
 
 local M = {}
 
 function M.select_mkdir_cmd(directory, cwd, info_msg)
-  if fn.has('win32') == 1 then
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
     return {
       cmd = 'cmd',
       opts = {
@@ -28,7 +29,7 @@ function M.select_mkdir_cmd(directory, cwd, info_msg)
 end
 
 function M.select_rm_file_cmd(file, info_msg)
-  if fn.has('win32') == 1 then
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
     return {
       cmd = 'cmd',
       opts = {
@@ -73,7 +74,7 @@ function M.select_compiler_args(repo, compiler)
       '-Os',
       '-lstdc++',
     }
-    if fn.has('win32') == 0 then
+    if fn.has('win32') == 0 or configs.force_unix_shell == true then
      table.insert(args, '-fPIC')
     end
     return args
@@ -81,7 +82,7 @@ function M.select_compiler_args(repo, compiler)
 end
 
 function M.select_install_rm_cmd(cache_folder, project_name)
-  if fn.has('win32') == 1 then
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
     local dir = cache_folder ..'\\'.. project_name
     return {
       cmd = 'cmd',
@@ -100,7 +101,7 @@ function M.select_install_rm_cmd(cache_folder, project_name)
 end
 
 function M.select_mv_cmd(from, to, cwd)
-  if fn.has('win32') == 1 then
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
     return {
       cmd = 'cmd',
       opts = {
@@ -191,7 +192,7 @@ function M.select_download_commands(repo, project_name, cache_folder, revision)
 end
 
 function M.make_directory_change_for_command(dir, command)
-  if fn.has('win32') == 1 then
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
     return string.format("pushd %s & %s & popd", dir, command)
   else
     return string.format("cd %s;\n %s", dir, command)

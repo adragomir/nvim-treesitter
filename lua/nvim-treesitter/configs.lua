@@ -10,6 +10,7 @@ local M = {}
 local config = {
   modules = {},
   ensure_installed = {},
+  force_unix_shell = false, 
   ignore_install = {},
   update_strategy = 'lockfile',
 }
@@ -273,6 +274,7 @@ end
 function M.setup(user_data)
   config.modules = vim.tbl_deep_extend('force', config.modules, user_data)
   config.ignore_install = user_data.ignore_install or {}
+  config.force_unix_shell = user_data.force_unix_shell or false
 
   local ensure_installed = user_data.ensure_installed or {}
   if #ensure_installed > 0 then

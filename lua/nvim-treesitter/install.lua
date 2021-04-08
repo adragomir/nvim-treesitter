@@ -339,7 +339,7 @@ end
 
 function M.uninstall(lang)
   local path_sep = '/'
-  if fn.has('win32') == 1 then
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
     path_sep = '\\'
   end
 

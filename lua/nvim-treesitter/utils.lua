@@ -2,6 +2,8 @@ local api = vim.api
 local fn = vim.fn
 local luv = vim.loop
 
+local configs = require'nvim-treesitter.configs'
+
 local M = {}
 
 function M.setup_commands(mod, commands)
@@ -18,7 +20,11 @@ function M.setup_commands(mod, commands)
 end
 
 function M.get_path_sep()
-  return fn.has('win32') == 1 and '\\' or '/'
+  if fn.has('win32') == 1 and not configs.force_unix_shell then
+    return "\\"
+  else
+    return "/"
+  end
 end
 
 -- Returns a function that joins the given arguments with separator. Arguments
